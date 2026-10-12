@@ -1,0 +1,209 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Coffee Operations Intelligence</title>
+<style>
+:root{--bg:#E9EDF0;--p:#fff;--p2:#F5F7F8;--tx:#1C2733;--mu:#6B7886;--bd:#D5DBE0;--bl:#2B6CB0;--tl:#2A9D8F;--gr:#3A9B5C;--am:#D9922B;--rd:#B94A48;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:12px/1.35 Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;display:flex;min-height:100vh;font-variant-numeric:tabular-nums}
+nav{width:176px;flex:none;background:#1F2A37;color:#AAB4BF;padding:8px 0}
+nav .b{padding:8px 14px 12px;color:#fff;font-weight:600;font-size:12px;border-bottom:1px solid #2E3B4A;margin-bottom:6px}
+nav a{display:flex;gap:9px;align-items:center;padding:7px 14px;cursor:pointer;border-left:2px solid transparent}
+nav a i{font-style:normal;width:16px;text-align:center;opacity:.8}nav a:hover{background:#263341}
+nav a.on{color:#fff;border-left-color:var(--tl);background:#263341}
+main{flex:1;min-width:1060px;display:flex;flex-direction:column;overflow-x:auto}
+header{display:flex;align-items:center;gap:10px;background:var(--p);border-bottom:1px solid var(--bd);padding:6px 12px;flex-wrap:wrap}
+header h1{font-size:13px;margin:0 6px 0 0;font-weight:600}
+.pill{padding:2px 8px;border:1px solid var(--bd);background:var(--p2);border-radius:2px;font-weight:600}
+.run{color:var(--gr)}.pau{color:var(--am)}.cmp{color:var(--bl)}
+button,select,input{font:inherit;color:var(--tx)}
+button,select{background:var(--p);border:1px solid var(--bd);border-radius:2px;padding:3px 9px;cursor:pointer}
+button:hover{background:var(--p2)}button.pr{background:var(--bl);color:#fff;border-color:var(--bl)}
+.sp{flex:1}.al{padding:2px 8px;border-radius:2px;border:1px solid var(--bd);font-weight:600}
+.al.w{color:var(--am);border-color:var(--am)}.al.c{color:var(--rd);border-color:var(--rd)}
+.ws{padding:8px;display:grid;gap:8px;grid-template-columns:1.75fr 1fr}
+.kp{grid-column:1/3;display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.k{background:var(--p);border:1px solid var(--bd);padding:6px 10px}
+.k span{color:var(--mu);font-size:11px}.k b{display:block;font-size:18px;font-weight:600;margin-top:1px}
+.pn{background:var(--p);border:1px solid var(--bd);min-width:0}
+.ph{padding:5px 10px;border-bottom:1px solid var(--bd);font-weight:600;display:flex;justify-content:space-between;background:var(--p2)}
+.ph em{font-style:normal;color:var(--mu);font-weight:400}
+.pb{padding:8px 10px}
+canvas{display:block;width:100%}#sim{aspect-ratio:800/520;background:#F7F9FA}
+.lg{display:flex;gap:10px;flex-wrap:wrap;color:var(--mu);font-size:11px;padding:5px 10px;border-top:1px solid var(--bd)}
+.lg i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}
+.ctl{display:grid;grid-template-columns:repeat(4,1fr);gap:6px 14px;padding:8px 10px;border-top:1px solid var(--bd)}
+.ctl label{display:block;color:var(--mu);font-size:11px}.ctl label b{float:right;color:var(--tx);font-weight:600}
+.ctl input[type=range]{width:100%;accent-color:var(--bl);margin:2px 0 0}
+.ch{padding:4px 10px 2px;border-bottom:1px solid #EEF1F3}.ch:last-child{border:0}
+.ch div{display:flex;justify-content:space-between;color:var(--mu);font-size:11px}.ch div b{color:var(--tx)}
+.ch canvas{height:62px}
+.r{display:grid;grid-template-columns:96px 1fr 52px;gap:8px;align-items:center;margin:4px 0}
+.r span{color:var(--mu)}.r b{text-align:right;font-weight:600}
+.bar{height:7px;background:#E8ECEF;position:relative}.bar i{position:absolute;left:0;top:0;bottom:0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sub{color:var(--mu);font-size:11px;margin:6px 0 2px;font-weight:600}
+.tb{width:100%;border-collapse:collapse}.tb th{text-align:left;color:var(--mu);font-weight:600;padding:4px 8px;border-bottom:1px solid var(--bd);background:var(--p2)}.tb td{padding:4px 8px;border-bottom:1px solid #EEF1F3}.tg{padding:1px 6px;border:1px solid var(--bd);border-radius:2px;font-size:11px}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.cd{border:1px solid var(--bd);padding:8px}.tbl{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}input[type=number]{width:70px;border:1px solid var(--bd);padding:2px 4px;border-radius:2px}#p-sim.full #sim{max-width:1000px;margin:0 auto}
+@media (prefers-reduced-motion:no-preference){.bar i{transition:width .3s}}
+</style></head><body>
+<nav><div class="b">Coffee Operations</div>
+<a><i>▦</i>Overview</a><a class="on"><i>◉</i>Live Simulation</a><a><i>⇄</i>Customer Flow</a><a><i>☰</i>Order Pipeline</a><a><i>◔</i>Barista Operations</a><a><i>▤</i>Seating &amp; Occupancy</a><a><i>∿</i>Analytics</a><a><i>⚗</i>Scenario Testing</a><a><i>⚙</i>Settings</a></nav>
+<main>
+<header><h1>Coffee Operations Intelligence</h1><span class="pill" id="st">Running</span><span class="pill" id="clk">07:00:00</span>
+<select id="sc"></select><select id="spd"><option value="1">1×</option><option value="5">5×</option><option value="30" selected>30×</option><option value="90">90×</option><option value="240">240×</option></select>
+<button class="pr" id="go">Pause</button><button id="stp">Step +30s</button><button id="rst">Reset</button><span class="sp"></span><span class="al" id="al">0 alerts</span></header>
+<div class="ws">
+<div class="kp" id="kp"></div>
+<section class="pn"><div class="ph">Live coffee shop simulation <em>top-down · 07:00–19:00 · arrivals close 18:00</em></div><canvas id="sim"></canvas>
+<div class="lg"><span><i style="background:#2B6CB0"></i>Entering / moving</span><span><i style="background:#D9922B"></i>Waiting to order</span><span><i style="background:#2A9D8F"></i>Order in preparation</span><span><i style="background:#3A9B5C"></i>Ready / departing</span><span><i style="background:#B94A48"></i>Long wait / abandoned</span></div>
+<div class="ctl" id="ctl"></div></section>
+<section class="pn"><div class="ph">Operational analytics <em>5-min intervals</em></div><div id="charts"></div></section>
+<section class="pn"><div class="ph">Customer flow analysis <em>cumulative movement density</em></div><div class="pb two"><div><canvas id="heat" style="aspect-ratio:40/26"></canvas><div class="sub">Abandonment &amp; exits</div><div id="ab"></div></div><div><div class="sub" style="margin-top:0">Avg time per service stage</div><div id="stg"></div><div class="sub">Bottleneck load</div><div id="bn"></div></div></div></section>
+<section class="pn"><div class="ph">Resource &amp; business performance</div><div class="pb"><div class="sub" style="margin-top:0">Barista workload</div><div id="bw"></div><div class="sub">Seating &amp; throughput</div><div id="rs"></div><div class="sub">Revenue &amp; order composition</div><div id="rv"></div></div></section>
+</div></main>
+<script>
+const $=id=>document.getElementById(id),W=800,H=520,rnd=(a,b)=>a+Math.random()*(b-a);
+const DR=[{n:'Brewed',t:20,p:60,w:.25,c:'#2B6CB0'},{n:'Espresso',t:40,p:70,w:.2,c:'#2A9D8F'},{n:'Americano',t:50,p:80,w:.2,c:'#3A9B5C'},{n:'Latte',t:95,p:110,w:.25,c:'#D9922B'},{n:'Specialty',t:160,p:150,w:.1,c:'#7B6BA8'}];
+const DR0=JSON.parse(JSON.stringify(DR));const SC={'Baseline day':{arr:60,bar:2,seat:16,prep:1},'Morning rush':{arr:110,bar:2,seat:16,prep:1},'Barista shortage':{arr:80,bar:1,seat:16,prep:1},'Seating crunch':{arr:70,bar:2,seat:6,prep:1},'Slow preparation':{arr:70,bar:2,seat:16,prep:1.7}};
+const S={arr:60,bar:2,seat:16,pat:7,tk:35,prep:1,pol:'FIFO',nos:'takeaway',d1:8,d2:30,bal:18};
+const CT=[['arr','Arrival rate (cust/h)',20,200,5],['bar','Baristas',1,4,1],['seat','Seats',4,24,1],['pat','Patience (min)',2,15,1],['tk','Takeaway %',0,100,5],['prep','Prep time ×',.6,2,.1]];
+$('sc').innerHTML=Object.keys(SC).map(k=>`<option>${k}</option>`).join('');
+$('ctl').innerHTML=CT.map(c=>`<div><label>${c[1]}<b id="${c[0]}v"></b></label><input type="range" id="${c[0]}" min="${c[2]}" max="${c[3]}" step="${c[4]}"></div>`).join('')+`<div><label>Scheduling policy</label><select id="pol"><option value="FIFO">First in, first out</option><option value="SJF">Shortest job first</option></select></div><div><label>No seat available</label><select id="nos"><option value="takeaway">Switch to takeaway</option><option value="wait">Wait up to 4 min</option></select></div>`;
+function sync(){CT.forEach(c=>{$(c[0]).value=S[c[0]];$(c[0]+'v').textContent=S[c[0]]});$('pol').value=S.pol;$('nos').value=S.nos}
+CT.forEach(c=>$(c[0]).oninput=e=>{S[c[0]]=+e.target.value;sync()});$('pol').onchange=e=>S.pol=e.target.value;$('nos').onchange=e=>S.nos=e.target.value;
+$('sc').onchange=e=>{Object.assign(S,SC[e.target.value]);sync();reset()};sync();
+const SEATS=[];for(let t=0;t<6;t++){const cx=400+(t%3)*150,cy=350+Math.floor(t/3)*100;SEATS.push([cx-22,cy],[cx+22,cy],[cx,cy-20],[cx,cy+20])}
+const qpos=i=>[i<12?175:210,150+(i%12)*16],EXIT=[18,420],PICK=[700,150];
+let T,id,oid,C,O,QO,PQ,RD,cash,B,seatOcc,ST,heat,ser,bk,paused=false;
+function reset(){T=0;id=0;oid=0;C=[];O=[];QO=[];PQ=[];RD=[];cash={cur:null};B=[1,.9,1.1,.95].map(sp=>({sp,cur:null,work:0,done:0,end:0}));seatOcc=new Array(24).fill(null);
+ST={arr:0,done:0,ab:0,balk:0,noseat:0,rev:0,rec:[],stg:[0,0,0,0],stgN:[0,0,0,0],by:{},drinks:0};heat=new Float32Array(1040);ser={a:[],c:[],w:[],u:[],q:[],p:[],k:[],o:[]};bk={a:0,c:0,ws:0,wn:0,busy:0};}
+reset();
+const rate=()=>{const h=7+T/3600;return S.arr*(.5+1.1*Math.exp(-((h-8.25)**2)/.5)+.9*Math.exp(-((h-12.5)**2)/.6)+.4*Math.exp(-((h-16)**2)/1))};
+const pick=()=>{const tw=DR.reduce((a,d)=>a+d.w,0)||1;let r=Math.random()*tw;for(const d of DR){if((r-=d.w)<0)return d}return DR[0]};
+const dist=(a,b)=>Math.hypot(a.x-b[0],a.y-b[1]);
+function depart(c,ab){c.st='Departing';c.ab=!!ab;c.path=[[480,275],[60,420]];c.tgt=EXIT}
+function spawn(){ST.arr++;bk.a++;if(QO.length>=S.bal){ST.balk++;return}
+ const dr=[pick()];if(Math.random()<.25)dr.push(pick());
+ const c={id:++id,x:rnd(16,26),y:505,sp:rnd(48,68),pat:S.pat*60*rnd(.6,1.4),dr,tk:Math.random()*100<S.tk,st:'Arriving',path:[],t0:T,tq:T,o:null,tgt:[0,0]};QO.push(c);C.push(c)}
+function mv(c,dt){const t=c.path.length?c.path[0]:c.tgt,dx=t[0]-c.x,dy=t[1]-c.y,d=Math.hypot(dx,dy),s=c.sp*dt;
+ if(d<=s){c.x=t[0];c.y=t[1];if(c.path.length){c.path.shift();return false}return true}c.x+=dx/d*s;c.y+=dy/d*s;return false}
+function freeSeat(){for(let i=0;i<S.seat;i++)if(seatOcc[i]==null)return i;return -1}
+function step(dt){T+=dt;if(T<39600&&Math.random()<rate()/3600*dt)spawn();
+ QO.forEach((c,i)=>{c.tgt=qpos(i)});
+ if(!cash.cur&&QO.length){const h=QO[0];if(h.st=='Waiting to Order'){QO.shift();cash.cur=h;h.st='Ordering';h.ts=T;h.end=T+rnd(18,34)+(h.dr.length-1)*8;ST.stg[0]+=T-h.tq;ST.stgN[0]++}}
+ if(cash.cur&&T>=cash.cur.end){const c=cash.cur;cash.cur=null;const o={id:++oid,c,dr:c.dr,tpay:T,tp:0,td:0,prep:c.dr.reduce((a,d)=>a+d.t,0)*rnd(.85,1.15)*S.prep};
+  c.o=o;O.push(o);PQ.push(o);c.st='Waiting for Drink';c.path=[];c.tgt=[rnd(560,750),rnd(185,260)];ST.stg[1]+=T-c.ts;ST.stgN[1]++;
+  c.dr.forEach(d=>{ST.rev+=d.p;ST.by[d.n]=(ST.by[d.n]||0)+d.p})}
+ B.forEach((b,i)=>{if(b.cur&&T>=b.end){const o=b.cur;o.td=T;b.cur=null;b.done++;ST.drinks+=o.dr.length;RD.push(o);ST.stg[2]+=T-o.tpay;ST.stgN[2]++}
+  if(!b.cur&&i<S.bar&&PQ.length){let k=0;if(S.pol=='SJF')PQ.forEach((o,j)=>{if(o.prep<PQ[k].prep)k=j});const o=PQ.splice(k,1)[0];o.tp=T;b.cur=o;b.end=T+o.prep/b.sp}
+  if(b.cur){b.work+=dt;bk.busy+=dt}});
+ for(let i=QO.length-1;i>=0;i--){const c=QO[i];if(c.st=='Waiting to Order'&&T-c.tq>c.pat){QO.splice(i,1);ST.ab++;depart(c,1)}}
+ C.forEach(c=>{
+  if(c.st=='Arriving'&&T-c.t0>3)c.st='Walking to Queue';
+  const arr=mv(c,dt);
+  if(c.st=='Walking to Queue'&&arr&&QO.includes(c))c.st='Waiting to Order';
+  else if(c.st=='Waiting for Drink'&&c.o.td){RD.splice(RD.indexOf(c.o),1);c.st='Collecting Order';c.path=[];c.tgt=[rnd(660,740),150]}
+  else if(c.st=='Collecting Order'&&arr){const o=c.o;o.tk=T;ST.done++;bk.c++;const w=T-c.t0;bk.ws+=w;bk.wn++;ST.rec.push(w);if(ST.rec.length>30)ST.rec.shift();ST.stg[3]+=T-o.td;ST.stgN[3]++;
+   if(c.tk)depart(c);else seekSeat(c)}
+  else if(c.st=='Waiting for Seat'){if(freeSeat()>=0)seekSeat(c);else if(T>c.until){ST.noseat++;depart(c)}}
+  else if(c.st=='Finding Seat'&&arr){c.st='Seated';c.until=T+rnd(S.d1,S.d2)*60}
+  else if(c.st=='Seated'&&T>c.until){seatOcc[c.seat]=null;depart(c)}
+  else if(c.st=='Departing'&&arr)c.gone=1;
+  const gx=Math.min(39,Math.max(0,c.x/20|0)),gy=Math.min(25,Math.max(0,c.y/20|0));heat[gy*40+gx]+=dt});
+ C=C.filter(c=>!c.gone);
+ if(Math.floor((T-dt)/300)<Math.floor(T/300)){ser.a.push(bk.a);ser.c.push(bk.c);ser.w.push(bk.wn?bk.ws/bk.wn/60:(ser.w.at(-1)||0));ser.u.push(bk.busy/(Math.max(1,S.bar)*300)*100);ser.q.push(QO.length);ser.p.push(PQ.length);ser.o.push(seatOcc.filter(v=>v!=null).length/Math.max(1,S.seat)*100);ser.k.push(C.filter(c=>c.st=='Waiting for Drink'||c.st=='Collecting Order').length);bk={a:0,c:0,ws:0,wn:0,busy:0}}}
+function seekSeat(c){const s=freeSeat();if(s>=0){seatOcc[s]=c.id;c.seat=s;c.st='Finding Seat';c.path=[[560,275]];c.tgt=SEATS[s]}
+ else if(S.nos=='wait'){if(c.st!='Waiting for Seat'){c.st='Waiting for Seat';c.until=T+240;c.tgt=[rnd(520,600),rnd(200,260)];c.path=[]}}else{ST.noseat++;depart(c)}}
+const col=c=>c.ab?'#B94A48':c.st=='Waiting to Order'?(T-c.tq>.7*c.pat?'#B94A48':'#D9922B'):['Ordering','Waiting for Drink','Waiting for Seat'].includes(c.st)?'#2A9D8F':['Collecting Order','Finding Seat','Seated','Departing'].includes(c.st)?'#3A9B5C':'#2B6CB0';
+function draw(){const cv=$('sim'),d=devicePixelRatio||1,w=cv.clientWidth;if(!w)return;cv.width=w*d;cv.height=w*H/W*d;const x=cv.getContext('2d'),k=cv.width/W;x.setTransform(k,0,0,k,0,0);
+ x.fillStyle='#F7F9FA';x.fillRect(0,0,W,H);x.strokeStyle='#9AA5B1';x.lineWidth=2;x.strokeRect(10,10,780,500);
+ x.lineWidth=1;x.font='9px Inter,sans-serif';
+ const lb=(t,a,b)=>{x.fillStyle='#6B7886';x.fillText(t,a,b)};
+ x.fillStyle='#E1E6EA';x.fillRect(230,70,420,26);x.fillRect(120,110,110,16);x.fillRect(650,110,100,16);
+ lb('PREPARATION BAR',240,88);lb('PAYMENT / ORDER',125,121);lb('PICKUP COUNTER',655,121);
+ for(let i=0;i<4;i++){const bx=300+i*90,b=B[i],on=i<S.bar;x.fillStyle=on?'#C9D1D8':'#EDF0F2';x.fillRect(bx-14,24,28,14);x.fillStyle=on?(b.cur?'#2A9D8F':'#1F2A37'):'#C9D1D8';x.beginPath();x.arc(bx,55,6,0,7);x.fill();if(on){x.fillStyle='#6B7886';x.fillText('B'+(i+1)+' '+(b.cur?'brewing':'idle'),bx-18,18)}}
+ x.fillStyle='#1F2A37';x.beginPath();x.arc(175,100,6,0,7);x.fill();
+ x.setLineDash([3,4]);x.strokeStyle='#C4CCD3';x.beginPath();x.moveTo(20,500);x.lineTo(175,340);x.moveTo(700,150);x.lineTo(480,275);x.lineTo(60,420);x.stroke();x.setLineDash([]);
+ if(QO.length>8){x.fillStyle='rgba(185,74,72,.12)';x.fillRect(160,140,70,210)}
+ if(PQ.length>5){x.fillStyle='rgba(217,146,43,.12)';x.fillRect(220,60,430,50)}
+ lb('Queue '+QO.length,130,150);lb('Prep backlog '+PQ.length,420,60);lb('ENTRANCE',14,512);lb('EXIT',14,412);
+ x.fillStyle='#D5DBE0';x.fillRect(6,490,8,20);x.fillRect(6,408,8,24);
+ for(let t=0;t<6;t++){const cx=400+(t%3)*150,cy=350+Math.floor(t/3)*100;x.fillStyle='#EEF1F3';x.strokeStyle='#B8C1C9';x.beginPath();x.arc(cx,cy,11,0,7);x.fill();x.stroke()}
+ SEATS.forEach((s,i)=>{x.fillStyle=i>=S.seat?'#E3E7EA':seatOcc[i]!=null?'#BFE3CB':'#fff';x.strokeStyle=i>=S.seat?'#E3E7EA':'#9AA5B1';x.fillRect(s[0]-5,s[1]-5,10,10);x.strokeRect(s[0]-5,s[1]-5,10,10)});
+ lb('SEATING',390,300);
+ C.forEach(c=>{x.fillStyle=col(c);x.beginPath();x.arc(c.x,c.y,c.st=='Seated'?3.5:4.5,0,7);x.fill();x.strokeStyle='#fff';x.lineWidth=1;x.stroke()})}
+function ch(id,sr,mx){const cv=$(id),w=cv.clientWidth,h=cv.clientHeight,d=devicePixelRatio||1;if(!w)return;cv.width=w*d;cv.height=h*d;const x=cv.getContext('2d');x.scale(d,d);
+ const m=mx||Math.max(1,...sr.flatMap(s=>s.d))*1.15;x.font='9px Inter,sans-serif';x.lineWidth=1;
+ for(let i=0;i<=2;i++){const y=4+(h-12)*i/2;x.strokeStyle='#E3E7EB';x.beginPath();x.moveTo(26,y);x.lineTo(w,y);x.stroke();x.fillStyle='#8A95A1';x.fillText((m*(1-i/2)).toFixed(m<10?1:0),0,y+3)}
+ sr.forEach(s=>{x.strokeStyle=s.c;x.lineWidth=1.5;x.beginPath();s.d.forEach((v,i)=>{const px=26+(w-30)*i/143,py=4+(h-12)*(1-Math.min(v,m)/m);i?x.lineTo(px,py):x.moveTo(px,py)});x.stroke()})}
+const CH=[['c1','Customer arrivals / orders completed','#2B6CB0','#3A9B5C'],['c2','Average wait, arrival to pickup (min)','#D9922B'],['c3','Barista utilization (%)','#2A9D8F'],['c4','Queue length by station','#D9922B','#2A9D8F','#2B6CB0']];
+$('charts').innerHTML=CH.map(c=>`<div class="ch"><div><span>${c[1]}</span><b id="${c[0]}v"></b></div><canvas id="${c[0]}"></canvas></div>`).join('');
+const bar=(l,p,c,v)=>`<div class="r"><span>${l}</span><div class="bar"><i style="width:${Math.min(100,p)}%;background:${c}"></i></div><b>${v}</b></div>`;
+const lvl=p=>p>80?'#B94A48':p>50?'#D9922B':'#2A9D8F',mmss=s=>Math.floor(s/60)+':'+String(Math.round(s%60)).padStart(2,'0'),avg=(a,n)=>n?a/n:0;
+function ui(){const occ=seatOcc.filter(v=>v!=null).length,aw=ST.rec.length?ST.rec.reduce((a,b)=>a+b,0)/ST.rec.length:0,busy=B.filter(b=>b.cur).length;
+ const K=[['Customers in shop',C.length],['Orders waiting',PQ.length+busy],['Avg waiting time',mmss(aw)],['Orders completed',ST.done],['Table occupancy',Math.round(occ/S.seat*100)+'%'],['Revenue generated','฿'+ST.rev.toLocaleString()]];
+ $('kp').innerHTML=K.map(k=>`<div class="k"><span>${k[0]}</span><b>${k[1]}</b></div>`).join('');
+ const s=25200+T,hh=Math.floor(s/3600),done=T>=43200;$('clk').textContent=String(hh).padStart(2,'0')+':'+String(Math.floor(s/60)%60).padStart(2,'0')+':'+String(Math.floor(s%60)).padStart(2,'0');
+ $('st').textContent=done?'Completed':paused?'Paused':'Running';$('st').className='pill '+(done?'cmp':paused?'pau':'run');
+ const A=[];if(QO.length>8)A.push('Order queue '+QO.length);if(PQ.length>5)A.push('Prep backlog '+PQ.length);if(occ>=S.seat*.95)A.push('Seating at capacity');if(ST.arr>20&&(ST.ab+ST.balk)/ST.arr>.1)A.push('Abandonment >10%');
+ $('al').textContent=A.length+' alert'+(A.length==1?'':'s');$('al').title=A.join(', ');$('al').className='al'+(A.length>2?' c':A.length?' w':'');
+ ch('c1',[{d:ser.a,c:'#2B6CB0'},{d:ser.c,c:'#3A9B5C'}]);ch('c2',[{d:ser.w,c:'#D9922B'}]);ch('c3',[{d:ser.u,c:'#2A9D8F'}],100);ch('c4',[{d:ser.q,c:'#D9922B'},{d:ser.p,c:'#2A9D8F'},{d:ser.k,c:'#2B6CB0'}]);
+ $('c1v').textContent=(ser.a.at(-1)||0)+' / '+(ser.c.at(-1)||0);$('c2v').textContent=(ser.w.at(-1)||0).toFixed(1);$('c3v').textContent=Math.round(ser.u.at(-1)||0)+'%';$('c4v').textContent='order '+QO.length+' · prep '+PQ.length+' · pickup '+ser.k.at(-1)||0;
+ const hc=$('heat'),hw=hc.clientWidth;if(hw){hc.width=400;hc.height=260;const x=hc.getContext('2d');x.fillStyle='#F7F9FA';x.fillRect(0,0,400,260);const mx=Math.max(1,...heat),lm=Math.log(1+mx);
+  for(let i=0;i<1040;i++){const v=Math.log(1+heat[i])/lm;if(v<.05)continue;x.fillStyle=v<.4?`rgba(43,108,176,${v*1.5})`:v<.7?`rgba(217,146,43,${v})`:`rgba(185,74,72,${v})`;x.fillRect(i%40*10,(i/40|0)*10,10,10)}
+  x.fillStyle='#1C2733';x.font='9px Inter,sans-serif';x.fillText('Queue',70,60);x.fillText('Pickup',330,40);x.fillText('Seating',250,180);x.fillText('Entrance',8,255)}
+ const sn=['Queue wait','Ordering','Preparation','Pickup wait'],av=sn.map((_,i)=>avg(ST.stg[i],ST.stgN[i])),mxv=Math.max(30,...av);
+ $('stg').innerHTML=sn.map((n,i)=>bar(n,av[i]/mxv*100,'#2B6CB0',mmss(av[i]))).join('');
+ const L=[['Order queue',QO.length/10*100],['Preparation',(PQ.length+busy)/(S.bar*2.5)*100],['Pickup counter',RD.length/6*100],['Seating',occ/S.seat*100]];
+ $('bn').innerHTML=L.map(l=>bar(l[0],l[1],lvl(l[1]),Math.round(Math.min(l[1],999))+'%')).join('')+`<div style="color:var(--mu);margin-top:4px">Primary constraint: <b style="color:var(--tx)">${L.sort((a,b)=>b[1]-a[1])[0][0]}</b></div>`;
+ const lost=ST.ab+ST.balk;$('ab').innerHTML=`<div class="r" style="grid-template-columns:1fr 1fr 1fr;gap:4px"><span>Left queue <b style="color:var(--tx)">${ST.ab}</b></span><span>Balked <b style="color:var(--tx)">${ST.balk}</b></span><span>No seat <b style="color:var(--tx)">${ST.noseat}</b></span></div><div style="color:var(--mu)">Loss rate <b style="color:var(--tx)">${ST.arr?(lost/ST.arr*100).toFixed(1):'0.0'}%</b> of ${ST.arr} arrivals</div>`;
+ $('bw').innerHTML=B.slice(0,S.bar).map((b,i)=>{const u=T?b.work/T*100:0;return bar('Barista '+(i+1),u,lvl(u*1.1),Math.round(u)+'%')}).join('');
+ const hr=Math.max(T/3600,.01),sla=ST.rec.length?ST.rec.filter(v=>v<300).length/ST.rec.length*100:100;
+ $('rs').innerHTML=bar('Table occupancy',occ/S.seat*100,lvl(occ/S.seat*100),occ+'/'+S.seat)+bar('Throughput',ST.drinks/hr/1.2,'#2A9D8F',Math.round(ST.drinks/hr)+'/h')+bar('Served <5 min',sla,sla<70?'#D9922B':'#3A9B5C',Math.round(sla)+'%');
+ const tot=Object.values(ST.by).reduce((a,b)=>a+b,0)||1;
+ $('rv').innerHTML=`<div style="display:flex;height:8px;background:#E8ECEF">${DR.map(d=>`<i style="width:${(ST.by[d.n]||0)/tot*100}%;background:${d.c}"></i>`).join('')}</div><div class="lg" style="border:0;padding:6px 0 0">${DR.map(d=>`<span><i style="background:${d.c}"></i>${d.n} ฿${(ST.by[d.n]||0).toLocaleString()}</span>`).join('')}</div><div style="color:var(--mu);margin-top:4px">${O.length} orders · avg ticket ฿${O.length?Math.round(ST.rev/O.length):0}</div>`}
+const lp=(n)=>{for(let i=0;i<n;i++)step(1)};
+$('go').onclick=()=>{paused=!paused;$('go').textContent=paused?'Start':'Pause'};
+$('stp').onclick=()=>{paused=true;$('go').textContent='Start';lp(30);ui()};
+$('rst').onclick=()=>{reset();paused=false;$('go').textContent='Pause';ui()};
+let last=performance.now(),acc=0;
+function loop(n){const r=Math.min(.1,(n-last)/1000);last=n;if(!paused&&T<43200){let s=r*+$('spd').value;while(s>0){const d=Math.min(1,s);step(d);s-=d}}draw();acc+=r;if(acc>.25){acc=0;ui()}requestAnimationFrame(loop)}
+let view='ov',scn=[];
+const hm=t=>{const s=25200+t;return String(Math.floor(s/3600)).padStart(2,'0')+':'+String(Math.floor(s/60)%60).padStart(2,'0')};
+[...document.querySelectorAll('.ws>section')].forEach((e,i)=>e.id=['p-sim','p-ch','p-fl','p-rs'][i]);
+$('kp').parentNode.insertAdjacentHTML('beforeend',`<section class="pn" id="p-ord" style="display:none"><div class="ph">Order pipeline <em id="ordm"></em></div><div class="pb"><div class="cards" id="ordk"></div><table class="tb" id="ordt" style="margin-top:8px"></table></div></section>
+<section class="pn" id="p-bar" style="display:none"><div class="ph">Barista operations <em><button id="badd">Add barista</button> <button id="brem">Remove barista</button></em></div><div class="pb"><div class="cards" id="barc"></div></div></section>
+<section class="pn" id="p-seat" style="display:none"><div class="ph">Seating &amp; occupancy <em id="seatm2"></em></div><div class="pb two"><div class="tbl" id="seatm"></div><div><div id="seats"></div><div class="ch" style="margin-top:8px"><div><span>Occupancy over time (%)</span><b id="c5v"></b></div><canvas id="c5"></canvas></div></div></div></section>
+<section class="pn" id="p-scn" style="display:none"><div class="ph">Scenario testing <em><button class="pr" id="runall">Run all scenarios (full day)</button></em></div><div class="pb"><div style="color:var(--mu);margin-bottom:6px">Each scenario runs a full 07:00–19:00 day using the current drink menu and settings. Current setup uses your live sliders. Your live simulation is not affected.</div><table class="tb" id="scnt"></table></div></section>
+<section class="pn" id="p-set" style="display:none"><div class="ph">Settings <em><button id="rsd">Restore defaults</button></em></div><div class="pb two"><div><div class="sub" style="margin-top:0">Drink menu</div><table class="tb" id="menu"></table></div><div><div class="sub" style="margin-top:0">Customer behaviour</div><div id="setc"></div></div></div></section>`);
+const VW={ov:['kp','p-sim','p-ch','p-fl','p-rs'],sim:['kp','p-sim'],flow:['kp','p-fl'],ord:['kp','p-ord'],bar:['kp','p-bar'],seat:['kp','p-seat'],ana:['kp','p-ch','p-rs'],scn:['p-scn'],set:['p-set']};
+const ALLP=['kp','p-sim','p-ch','p-fl','p-rs','p-ord','p-bar','p-seat','p-scn','p-set'],navs=[...document.querySelectorAll('nav a')];
+['ov','sim','flow','ord','bar','seat','ana','scn','set'].forEach((k,i)=>{navs[i].dataset.v=k;navs[i].onclick=()=>setView(k)});
+function setView(v){view=v;ALLP.forEach(p=>{const e=$(p);e.style.display=VW[v].includes(p)?'':'none';e.style.gridColumn=(v!='ov'&&p!='kp')?'1/3':'';e.classList.toggle('full',v!='ov')});navs.forEach(a=>a.classList.toggle('on',a.dataset.v==v));rv();draw();ui()}
+function rOrd(){const busy=B.filter(b=>b.cur).length,st={'Queued':'#6B7886','Brewing':'#2A9D8F','Ready':'#D9922B','Picked up':'#3A9B5C'};
+ $('ordk').innerHTML=[['Awaiting a barista',PQ.length],['Brewing',busy],['Ready for pickup',RD.length],['Picked up',ST.done]].map(k=>`<div class="k"><span>${k[0]}</span><b>${k[1]}</b></div>`).join('');
+ $('ordm').textContent=O.length+' orders · '+(S.pol=='SJF'?'shortest job first':'first in, first out');
+ $('ordt').innerHTML='<tr><th>Order</th><th>Drinks</th><th>Placed</th><th>Status</th><th>In queue</th><th>Brew time</th><th>Total</th></tr>'+O.slice(-16).reverse().map(o=>{const s=o.tk?'Picked up':o.td?'Ready':o.tp?'Brewing':'Queued';return `<tr><td>#${o.id}</td><td>${o.dr.map(d=>d.n).join(', ')}</td><td>${hm(o.tpay)}</td><td><span class="tg" style="color:${st[s]};border-color:${st[s]}">${s}</span></td><td>${mmss((o.tp||T)-o.tpay)}</td><td>${o.tp?mmss((o.td||T)-o.tp):'—'}</td><td>${mmss((o.tk||T)-o.c.t0)}</td></tr>`}).join('')}
+function rBar(){$('barc').innerHTML=B.map((b,i)=>{const on=i<S.bar,u=T?b.work/T*100:0,pg=b.cur?Math.min(100,(T-b.cur.tp)/(b.end-b.cur.tp)*100):0;return `<div class="cd" style="opacity:${on||b.cur?1:.5}"><b>Barista ${i+1}</b> <span class="tg">${!on&&!b.cur?'Off shift':b.cur?'Brewing':'Idle'}</span><div style="margin:6px 0;color:var(--mu)">${b.cur?'Order #'+b.cur.id+' · '+b.cur.dr.map(d=>d.n).join(', '):'No active order'}</div>${bar('Progress',pg,'#2A9D8F',Math.round(pg)+'%')}${bar('Utilization',u,lvl(u*1.1),Math.round(u)+'%')}<div style="color:var(--mu)">${b.done} orders done · speed ${b.sp}×</div></div>`}).join('')}
+function rSeat(){const occ=seatOcc.filter(v=>v!=null).length,wt=C.filter(c=>c.st=='Waiting for Seat').length;
+ $('seatm').innerHTML=[0,1,2,3,4,5].map(t=>`<div class="cd"><div style="color:var(--mu);margin-bottom:4px">Table ${t+1}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">${[0,1,2,3].map(j=>{const i=t*4+j,o=seatOcc[i]!=null,off=i>=S.seat;return `<div style="height:20px;border:1px solid ${off?'#E3E7EA':'#9AA5B1'};background:${off?'#EEF1F3':o?'#BFE3CB':'#fff'};font-size:10px;padding:2px 4px;color:var(--mu)">${off?'off':o?'#'+seatOcc[i]:'free'}</div>`}).join('')}</div></div>`).join('');
+ $('seatm2').textContent=occ+' of '+S.seat+' seats in use';
+ $('seats').innerHTML=bar('Occupancy',occ/S.seat*100,lvl(occ/S.seat*100),Math.round(occ/S.seat*100)+'%')+bar('Free seats',(S.seat-occ)/S.seat*100,'#3A9B5C',Math.max(0,S.seat-occ))+bar('Waiting for a seat',wt*20,wt?'#D9922B':'#2A9D8F',wt)+bar('Left without seat',ST.noseat*5,ST.noseat?'#B94A48':'#2A9D8F',ST.noseat);
+ ch('c5',[{d:ser.o,c:'#3A9B5C'}],100);$('c5v').textContent=Math.round(ser.o.at(-1)||0)+'%'}
+function rv(){if(view=='ord')rOrd();else if(view=='bar')rBar();else if(view=='seat')rSeat()}
+const _ui=ui;ui=function(){_ui();rv()};
+$('badd').onclick=()=>{S.bar=Math.min(4,S.bar+1);sync()};$('brem').onclick=()=>{S.bar=Math.max(1,S.bar-1);sync()};
+function buildSet(){$('menu').innerHTML='<tr><th>Drink</th><th>Prep (s)</th><th>Price (฿)</th><th>Mix (%)</th></tr>'+DR.map((d,i)=>`<tr><td>${d.n}</td>${[['t',d.t],['p',d.p],['w',Math.round(d.w*100)]].map(x=>`<td><input type="number" min="1" data-i="${i}" data-k="${x[0]}" value="${x[1]}"></td>`).join('')}</tr>`).join('');
+ $('setc').innerHTML=[['d1','Seat dwell, minimum (min)'],['d2','Seat dwell, maximum (min)'],['bal','Queue length where customers balk']].map(x=>`<div class="r" style="grid-template-columns:1fr 80px"><span>${x[1]}</span><input type="number" min="1" data-s="${x[0]}" value="${S[x[0]]}"></div>`).join('')+'<div style="color:var(--mu);margin-top:6px">Arrival rate, staffing, seats, patience and policies are in the Live Simulation controls. Changes apply to customers who arrive from now on.</div>'}
+$('menu').oninput=e=>{const i=+e.target.dataset.i,k=e.target.dataset.k;if(k)DR[i][k]=k=='w'?+e.target.value/100:+e.target.value};
+$('setc').oninput=e=>{if(e.target.dataset.s)S[e.target.dataset.s]=+e.target.value};
+$('rsd').onclick=()=>{DR.forEach((d,i)=>Object.assign(d,DR0[i]));Object.assign(S,SC['Baseline day'],{d1:8,d2:30,bal:18,pat:7,tk:35,pol:'FIFO',nos:'takeaway'});$('sc').value='Baseline day';sync();buildSet();reset()};
+function showScn(){const th=x=>`<th>${x}</th>`;$('scnt').innerHTML='<tr>'+['Scenario','Setup','Orders done','Avg wait','Lost customers','Peak queue','Barista util.','Seat occ.','Revenue',''].map(th).join('')+'</tr>'+scn.map((r,i)=>`<tr><td><b>${r.n}</b></td><td>${r.arr}/h · ${r.bar} baristas · ${r.seat} seats</td><td>${r.done}</td><td style="color:${r.w>300?'#B94A48':r.w>180?'#D9922B':'#3A9B5C'}">${mmss(r.w)}</td><td style="color:${r.loss>10?'#B94A48':r.loss>4?'#D9922B':'#3A9B5C'}">${r.loss.toFixed(1)}%</td><td>${r.pk}</td><td>${Math.round(r.u)}%</td><td>${Math.round(r.so)}%</td><td>฿${r.rev.toLocaleString()}</td><td>${r.p?`<button data-n="${r.n}">Load</button>`:''}</td></tr>`).join('')}
+$('scnt').onclick=e=>{const n=e.target.dataset.n;if(n){Object.assign(S,SC[n]);$('sc').value=n;sync();reset();paused=false;$('go').textContent='Pause';setView('sim')}};
+function runAll(){const b=$('runall');b.textContent='Running…';b.disabled=true;setTimeout(()=>{
+ const sv=[T,id,oid,C,O,QO,PQ,RD,cash,B,seatOcc,ST,heat,ser,bk],sS={...S},R=[];
+ [['Current setup',null],...Object.keys(SC).map(n=>[n,SC[n]])].forEach(([n,p])=>{Object.assign(S,sS);if(p)Object.assign(S,p);reset();let pk=0,so=0,k=0;
+  while(T<43200){step(2);if(QO.length>pk)pk=QO.length;so+=seatOcc.filter(v=>v!=null).length/S.seat;k++}
+  const w=O.filter(o=>o.tk).map(o=>o.tk-o.c.t0),u=B.slice(0,S.bar).reduce((a,x)=>a+x.work,0)/(S.bar*T);
+  R.push({n,p,done:ST.done,w:w.reduce((a,x)=>a+x,0)/(w.length||1),loss:(ST.ab+ST.balk)/Math.max(1,ST.arr)*100,rev:ST.rev,u:u*100,pk,so:so/k*100,bar:S.bar,seat:S.seat,arr:S.arr})});
+ [T,id,oid,C,O,QO,PQ,RD,cash,B,seatOcc,ST,heat,ser,bk]=sv;Object.assign(S,sS);scn=R;showScn();b.textContent='Run all scenarios (full day)';b.disabled=false},30)}
+$('runall').onclick=runAll;buildSet();setView('ov');
+ui();requestAnimationFrame(loop);
+</script></body></html>
